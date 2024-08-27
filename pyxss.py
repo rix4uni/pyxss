@@ -210,6 +210,14 @@ def main():
         print(f"Error: The file '{args.payload}' does not exist.")
         sys.exit(1)
 
+    # Check if the payload file contains 'rix4uni'
+    if args.payload:
+        with open(args.payload, 'r') as f:
+            content = f.read()
+            if 'rix4uni' not in content:
+                print(f"Error: The file '{args.payload}' does not contain 'rix4uni' in the start of payload.\nExample: rix4uni<script>alert(1)</script>")
+                sys.exit(1)
+
     vulnerable_flags = {}  # Shared dictionary to track vulnerable base URLs
 
     try:
