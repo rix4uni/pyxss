@@ -156,7 +156,7 @@ def process_url(url, vulnerable_flags, notify_discord, output, append, timeout):
 
 def generate_payload_urls(base_url, args):
     try:
-        command = f"echo {base_url} | python3 ~/bin/pvreplace/pvreplace.py -payload {args.payload} -part param-value -type replace -mode single -without-encode | go run xsschecker.go -match 'rix4uni' -t 100 -integrate"
+        command = f"echo {base_url} | python3 tools/pvreplace.py -payload {args.payload} -part param-value -type replace -mode single -without-encode | go run tools/xsschecker.go -match 'rix4uni' -t 100 -integrate"
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
         
         if args.verbose:
@@ -180,10 +180,10 @@ def main():
     parser = argparse.ArgumentParser(
         description='pyxss is a XSS Vulnerability Validator',
         epilog='Examples:\n'
-               '  pyxss -list httpx.txt -payload payloads/payloads.txt\n'
-               '  pyxss -list httpx.txt -payload payloads/payloads.txt -o validxss.txt\n'
-               '  pyxss -list httpx.txt -payload payloads/payloads.txt -o validxss.txt -discord\n'
-               '  pyxss -list httpx.txt -payload payloads/payloads.txt -o validxss.txt -discord -v\n',
+               '  python3 pyxss.py -list httpx.txt -payload payloads/xsspayloads.txt\n'
+               '  python3 pyxss.py -list httpx.txt -payload payloads/xsspayloads.txt -o validxss.txt\n'
+               '  python3 pyxss.py -list httpx.txt -payload payloads/xsspayloads.txt -o validxss.txt -discord\n'
+               '  python3 pyxss.py -list httpx.txt -payload payloads/xsspayloads.txt -o validxss.txt -discord -v\n',
         formatter_class=argparse.RawTextHelpFormatter
     )
     parser.add_argument('-o', '--output', type=str, metavar='OUTPUT_FILE', help='Save output to a file')
@@ -199,6 +199,15 @@ def main():
      # Check if both -list and -payload are not provided
     if args.list is None or args.payload is None:
         print("Error: You must provide both -list and -payload arguments.")
+        sys.exit(1)
+
+    # Check if the specified files exist
+    if args.list and not os.path.isfile(args.list):
+        print(f"Error: The file '{args.list}' does not exist.")
+        sys.exit(1)
+
+    if args.payload and not os.path.isfile(args.payload):
+        print(f"Error: The file '{args.payload}' does not exist.")
         sys.exit(1)
 
     vulnerable_flags = {}  # Shared dictionary to track vulnerable base URLs
