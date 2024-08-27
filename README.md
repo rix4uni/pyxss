@@ -2,7 +2,7 @@
 
 # Usage
 ```
-python3 pyxss.py -h
+pyxss.py -h
 
  ____  _  _  _  _  ___  ___
 (  _ \( \/ )( \/ )/ __)/ __)
@@ -28,8 +28,8 @@ options:
   --version             Show Current Version of pyxss
 
 Examples:
-  pyxss -list httpx.txt -payload payloads/payloads.txt
-  pyxss -list httpx.txt -payload payloads/payloads.txt -o validxss.txt
-  pyxss -list httpx.txt -payload payloads/payloads.txt -o validxss.txt -discord
-  pyxss -list httpx.txt -payload payloads/payloads.txt -o validxss.txt -discord -v
+  python3 pyxss.py -list httpx.txt -payload payloads/xsspayloads.txt
+  python3 pyxss.py -list httpx.txt -payload payloads/xsspayloads.txt -o validxss.txt
+  python3 pyxss.py -list httpx.txt -payload payloads/xsspayloads.txt -o validxss.txt -discord
+  python3 pyxss.py -list httpx.txt -payload payloads/xsspayloads.txt -o validxss.txt -discord -v
 ```
