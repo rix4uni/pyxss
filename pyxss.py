@@ -9,6 +9,7 @@ import os
 import re
 import threading
 import sys
+import psutil
 
 # Define the version
 __version__ = "v0.0.1"  # Current Version of pyxss
@@ -33,6 +34,33 @@ print(BANNER)
 
 # Lock for synchronizing access to the vulnerable_flags dictionary
 lock = threading.Lock()
+
+# Kill process created by this tool
+def kill_processes():
+    try:
+        # Run the pkill command
+        result = subprocess.run(['pkill', '-f', 'chromedriver|chrome|cat'], check=True, text=True, capture_output=True)
+        # Print the output if needed
+        print(result.stdout)
+    except subprocess.CalledProcessError as e:
+        # Handle errors if the command fails
+        print(f"Error: {e}")
+
+# Function to monitor memory usage
+def monitor_memory(threshold=95):
+    while True:
+        memory_usage = psutil.virtual_memory().percent
+        if memory_usage >= threshold:
+            print(f"\n{REDCOLOR}Memory usage exceeded {threshold}%. Terminating the program.{RESETCOLOR}")
+
+            kill_processes()
+            os.kill(os.getpid(), 9)  # Forcefully terminate the program
+            sys.exit()
+        time.sleep(1)  # Check memory usage every second
+
+# Start the memory monitor in a separate thread
+monitor_thread = threading.Thread(target=monitor_memory, daemon=True)
+monitor_thread.start()
 
 def is_notify_installed():
     # Full path to the notify command
