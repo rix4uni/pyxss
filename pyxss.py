@@ -128,6 +128,8 @@ def process_url(url, vulnerable_flags, notify_discord, output, append, timeout):
                 print(f"URL: {url} - Error: Website not found (DNS issue)")
             elif "ERR_CONNECTION_TIMED_OUT" in str(e):
                 print(f"URL: {url} - Error: Connection timed out (website might be down)")
+            elif "ERR_CONNECTION_CLOSED" in str(e):
+                print(f"URL: {url} - Error: Website is not live of website might be down because of too many request 429 status-code")
             elif "chrome not reachable" in str(e) or "ERR_INTERNET_DISCONNECTED" in str(e):
                 print(f"URL: {url} - Error: Internet connection is not working")
             else:
@@ -145,6 +147,8 @@ def process_url(url, vulnerable_flags, notify_discord, output, append, timeout):
             print(f"URL: {url} - Error: Website not found (DNS issue)")
         elif "ERR_CONNECTION_TIMED_OUT" in str(e):
             print(f"URL: {url} - Error: Connection timed out (website might be down)")
+        elif "ERR_CONNECTION_CLOSED" in str(e):
+            print(f"URL: {url} - Error: Website is not live of website might be down because of too many request 429 status-code")
         elif "chrome not reachable" in str(e) or "ERR_INTERNET_DISCONNECTED" in str(e):
             print(f"URL: {url} - Error: Internet connection is not working")
         else:
@@ -233,6 +237,10 @@ def main():
 
             print(f"Processing URL: {base_url}")
             payload_urls = generate_payload_urls(base_url, args)
+
+            # Tracking which url currently processing, this can we used later if program killed accidentally
+            with open("resume.cfg", "w") as file:
+                file.write(base_url)
 
             # Process URLs 10 urls at a time
             with ThreadPoolExecutor(max_workers=10) as executor:
