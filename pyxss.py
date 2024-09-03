@@ -289,5 +289,12 @@ def main():
     finally:
         print("INFO: Succesfully Scanned all URLs!.")
 
+        # Send Succesfully Scanned all URLs! message to telegram
+        message = "INFO: Succesfully Scanned all URLs!."
+        notify_command = ['notify', '-silent', '-duc', '-bulk', '-id', 'xssnotify']
+        result = subprocess.run(notify_command, input=message, text=True, capture_output=True)
+        result.stdout
+
 if __name__ == "__main__":
     main()
+    
