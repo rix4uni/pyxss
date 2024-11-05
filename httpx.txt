@@ -1,3 +1,0 @@
-http://lab.awh.zdresearch.com/chapter3/xss-labs/types/reflected.php?name=rix4uni
-http://testphp.vulnweb.com/AJAX/infocateg.php?id=rix4uni
-http://testphp.vulnweb.com/hpp/index.php?pp=rix4uni

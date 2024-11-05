@@ -1,35 +1,49 @@
-# pyxss
+## pyxss
+Simple XSS vulnerability checker tool very useful with xsschecker.
 
-# Usage
+## Installation
 ```
-pyxss.py -h
+git clone https://github.com/rix4uni/pyxss.git
+cd pyxss
+python3 setup.py install
+```
 
- ____  _  _  _  _  ___  ___
-(  _ \( \/ )( \/ )/ __)/ __)
- )___/ \  /  )  ( \__ \\__ \
-(__)   (__) (_/\_)(___/(___/
-                        v0.0.1
+## Usage
+```
+usage: pyxss [-h] [-o OUTPUT_FILE] [--timeout TIMEOUT] [--popupload POPUPLOAD] [--silent] [--headless] [--version]
 
-usage: pyxss.py [-h] [-o OUTPUT_FILE] [-a OUTPUT_FILE] [-discord] [--timeout TIMEOUT] [-list [LIST]] [-payload [PAYLOAD]] [-v] [--version]
-
-pyxss is a XSS Vulnerability Validator
+pyxss - Simple XSS vulnerability checker.
 
 options:
   -h, --help            show this help message and exit
   -o OUTPUT_FILE, --output OUTPUT_FILE
                         Save output to a file
-  -a OUTPUT_FILE, --append OUTPUT_FILE
-                        Append output to a file
-  -discord              Send notifications to Discord
-  --timeout TIMEOUT     Timeout (in seconds) for http client (default 15)
-  -list [LIST]          File to read Httpx alive URLs
-  -payload [PAYLOAD]    Payload file
-  -v, --verbose         Display info of what is going on
-  --version             Show Current Version of pyxss
+  --timeout TIMEOUT     Timeout in seconds for HTTP client (default 15)
+  --popupload POPUPLOAD
+                        Wait time for Alert popup to load in seconds (default 5)
+  --silent              Run without printing the banner
+  --headless            Run in headless mode (GUI Browser)
+  --version             Show current version of pyxss
 
 Examples:
-  python3 pyxss.py -list httpx.txt -payload payloads/xsspayloads.txt
-  python3 pyxss.py -list httpx.txt -payload payloads/xsspayloads.txt -o validxss.txt
-  python3 pyxss.py -list httpx.txt -payload payloads/xsspayloads.txt -o validxss.txt -discord
-  python3 pyxss.py -list httpx.txt -payload payloads/xsspayloads.txt -o validxss.txt -discord -v
+  # Step 1
+  curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/xss/xss-small.txt" | sed 's/^/rix4uni/' | unew -q fav-xss.txt
+
+  # Step 2
+  cat urls.txt | pvreplace -silent -payload fav-xss.txt -fuzzing-part param-value -fuzzing-type replace -fuzzing-mode single | xsschecker -nc -match 'rix4uni' -vuln -t 100 | sed 's/^Vulnerable: \[[^]]*\] \[[^]]*\] //' | unew xsschecker.txt
+
+  # Step 3
+  cat xsschecker.txt | pyxss -o validxss.txt
+```
+
+## Usage Examples
+```
+# Step 1
+curl -s "https://raw.githubusercontent.com/rix4uni/WordList/refs/heads/main/payloads/xss/xss-small.txt" | sed 's/^/rix4uni/' | unew -q fav-xss.txt
+
+# Step 2
+cat urls.txt | pvreplace -silent -payload fav-xss.txt -fuzzing-part param-value -fuzzing-type replace -fuzzing-mode single | xsschecker -nc -match 'rix4uni' -vuln -t 100 | sed 's/^Vulnerable: \[[^]]*\] \[[^]]*\] //' | unew xsschecker.txt
+    
+# Step 3
+cat xsschecker.txt | pyxss -o validxss.txt
 ```
