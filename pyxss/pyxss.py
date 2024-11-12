@@ -6,7 +6,7 @@ from selenium.webdriver.common.alert import Alert
 from selenium.common.exceptions import TimeoutException, NoAlertPresentException, WebDriverException
 
 # Define the version
-__version__ = "v0.0.2"  # Current Version of pyxss
+__version__ = "v0.0.3"  # Current Version of pyxss
 
 # ANSI color codes
 REDCOLOR = '\033[91m'
@@ -44,6 +44,7 @@ def main():
     parser.add_argument('--timeout', type=int, default=15, help='Timeout in seconds for HTTP client (default 15)')
     parser.add_argument('--popupload', type=int, default=5, help='Wait time for Alert popup to load in seconds (default 5)')
     parser.add_argument('--silent', action='store_true', help='Run without printing the banner')
+    parser.add_argument('--no-color', action='store_true', help='Disable colored output')
     parser.add_argument('--headless', action='store_true', help='Run in headless mode (GUI Browser)')
     parser.add_argument('--version', action='version', version='%(prog)s ' + __version__, help='Show current version of pyxss')
     args = parser.parse_args()
@@ -103,13 +104,30 @@ def main():
                 # Save VULNERABLE output to file
                 if args.output:
                     with open(args.output, "a") as file:
-                        file.write(url + "\n")
+                        if args.no_color:
+                            file.write(f"VULNERABLE: {url} [Alert text: {alert_text}]\n")
+                        else:
+                            file.write(f"{REDCOLOR}VULNERABLE: {url} [Alert text: {alert_text}]{RESETCOLOR}\n")
 
                 alert.accept()
-                print(f"{REDCOLOR}VULNERABLE: {url} [Alert text: {alert_text}]{RESETCOLOR}")
+                if args.no_color:
+                    print(f"VULNERABLE: {url} [Alert text: {alert_text}]", flush=True)
+                else:
+                    print(f"{REDCOLOR}VULNERABLE: {url} [Alert text: {alert_text}]{RESETCOLOR}", flush=True)
 
             except NoAlertPresentException:
-                print(f"{GREENCOLOR}NOT VULNERABLE: {url} [No alert found]{RESETCOLOR}")
+                # Save NOT VULNERABLE output to file
+                if args.output:
+                    with open(args.output, "a") as file:
+                        if args.no_color:
+                            file.write(f"NOT VULNERABLE: {url} [No alert found]\n")
+                        else:
+                            file.write(f"{GREENCOLOR}NOT VULNERABLE: {url} [No alert found]{RESETCOLOR}\n")
+
+                if args.no_color:
+                    print(f"NOT VULNERABLE: {url} [No alert found]", flush=True)
+                else:
+                    print(f"{GREENCOLOR}NOT VULNERABLE: {url} [No alert found]{RESETCOLOR}", flush=True)
             except TimeoutException:
                 print(f"URL: {url} - Error: Page load timed out")
             except WebDriverException as e:
