@@ -54,3 +54,7 @@ cat urls.txt | pvreplace -silent -payload fav-xss.txt -fuzzing-part param-value 
 # Step 3
 cat xsschecker.txt | pyxss -o validxss.txt
 ```
+
+## Demo
+https://github.com/user-attachments/assets/3e9dcfaf-8f46-44e5-ab59-e9833ebbaf8f
+
