@@ -8,9 +8,15 @@ cd pyxss
 python3 setup.py install
 ```
 
+## pipx
+Quick setup in isolated python environment using [pipx](https://pypa.github.io/pipx/)
+```
+pipx install --force git+https://github.com/rix4uni/telebackup.git
+```
+
 ## Usage
 ```
-usage: pyxss [-h] [-o OUTPUT_FILE] [--timeout TIMEOUT] [--popupload POPUPLOAD] [--silent] [--headless] [--version]
+usage: pyxss [-h] [-o OUTPUT_FILE] [--timeout TIMEOUT] [--popupload POPUPLOAD] [--silent] [--no-color] [--headless] [--version]
 
 pyxss - Simple XSS vulnerability checker.
 
@@ -22,6 +28,7 @@ options:
   --popupload POPUPLOAD
                         Wait time for Alert popup to load in seconds (default 5)
   --silent              Run without printing the banner
+  --no-color            Disable colored output
   --headless            Run in headless mode (GUI Browser)
   --version             Show current version of pyxss
 
