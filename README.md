@@ -58,5 +58,7 @@ cat xsschecker.txt | pyxss -o validxss.txt
 ```
 
 ## Demo
-https://github.com/user-attachments/assets/3e9dcfaf-8f46-44e5-ab59-e9833ebbaf8f
+`v0.0.4` https://youtu.be/CWTEoU3Pkdo
+
+`v0.0.3` https://github.com/user-attachments/assets/3e9dcfaf-8f46-44e5-ab59-e9833ebbaf8f
 
